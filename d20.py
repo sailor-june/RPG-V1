@@ -42,7 +42,111 @@ def get_roll():
     slowdown()
     print("""roll:""", roll - bonus_to_hit, """
              """)
+import random
+import time
 
+
+stren = 2
+dex = 3
+intel = 0
+aclass = 5
+bonus_to_hit = round(dex/2)
+bad_hp = 1000000
+
+items = [('rapier', 1, 0, 0),('longsword', 0, 1, 1)]
+
+
+
+def combat():
+    global stren
+    global bad_hp
+
+    def get_roll():
+        roll = (random.randint(1, 20) + bonus_to_hit)
+        print("""
+             roll:""", roll - bonus_to_hit, """
+             """)
+        return roll
+    roll = get_roll()
+
+
+    print("strength, dex:", stren, dex,)
+    print("enemy armor class:", aclass)
+    print('to hit: ', aclass+7)
+
+    time.sleep(2)
+
+## ROLL TO HIT
+    #miss condition
+    if roll > 7:
+        print("roll+bonus to hit:", roll)
+    if roll < 7:
+        get_hit = 0
+        print("miss!")
+    elif roll > 7 and roll - aclass < 7:
+        get_hit=0
+        print('Your blow was deflected!')
+    #critical hit condition
+    elif roll == 20:
+        get_hit = 2
+        print('Critical hit!')
+    ##critical miss condition
+    elif roll == 1:
+        get_hit = 0
+        print('critical miss!')
+    #hit condition
+    else:
+        get_hit = 1
+        print('Hit!')
+
+
+#CRITICALS
+        time.sleep(2)
+
+
+    if roll == 1:
+        print("Critical miss!")
+        time.sleep(2)
+
+
+### APPLYING DAMAGE
+    def get_damage():
+        if get_hit == 3:
+            return 0
+        else:
+            damage = (get_hit * (stren + random.randint(1,6)))
+        print('hit for: ', damage, '  hit bonus (',get_hit, ') * (strength [', stren,'] + 1d6 (',round((damage / get_hit)-stren),')')
+        return damage
+
+    if get_hit==1:
+        bad_hp = bad_hp - get_damage()
+
+
+    time.sleep(2)
+
+
+    print('enemy hp:', bad_hp)
+    print("""
+  ***
+  """)
+
+
+### GET USER INITIATIVE
+    init = input('continue? y/n')
+    if init == 'y':
+        combat()
+    elif init == 'n':
+        print("goodbye!")
+    else:
+        print('Invalid!')
+        init=input('y/n')
+
+
+print(bad_hp)
+
+combat()
+
+print('test')
     return roll
 
 
